@@ -6,7 +6,6 @@ struct HubCard<Content: View>: View {
     var body: some View {
         Group {
             content()
-                .padding(12)
         }
         .background(Color.groupedBackground)
         .cornerRadius(10)

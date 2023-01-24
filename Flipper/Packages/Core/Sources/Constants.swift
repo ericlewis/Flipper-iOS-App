@@ -2,7 +2,7 @@ import Foundation
 
 extension String {
     static var appGroup: String {
-        "group.com.flipperdevices.main"
+        "group.com.flipperdevices.mainn"
     }
 }
 

@@ -1,8 +1,11 @@
 import SwiftUI
 
 struct CarrierView: View {
-    @StateObject var viewModel: CarrierViewModel
-    @Environment(\.dismiss) var dismiss
+    @StateObject
+    private var viewModel: CarrierViewModel = .init()
+
+    @Environment(\.dismiss)
+    private var dismiss
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -19,15 +22,7 @@ struct CarrierView: View {
             }
         }
         .padding(14)
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            LeadingToolbarItems {
-                BackButton {
-                    dismiss()
-                }
-                Title("I'm watching you")
-            }
-        }
+        .navigationTitle("I'm watching you")
     }
 }

@@ -2,8 +2,11 @@ import Core
 import SwiftUI
 
 struct CategoryDeletedView: View {
-    @StateObject var viewModel: CategoryDeletedViewModel
-    @Environment(\.dismiss) private var dismiss
+    @StateObject
+    private var viewModel: CategoryDeletedViewModel = .init()
+
+    @Environment(\.dismiss)
+    private var dismiss
 
     var restoreSheetTitle: String {
         "All deleted keys will be restored and synced with Flipper"
@@ -18,30 +21,20 @@ struct CategoryDeletedView: View {
     }
 
     var body: some View {
-        ZStack {
-            Text("No deleted keys")
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(.black40)
-                .opacity(viewModel.items.isEmpty ? 1 : 0)
-
-            ScrollView {
-                CategoryList(items: viewModel.items) { item in
-                    viewModel.onItemSelected(item: item)
-                }
-                .padding(14)
+        List {
+            CategoryList(items: viewModel.items) { item in
+                viewModel.onItemSelected(item: item)
             }
         }
-
-        .background(Color.background)
-        .navigationBarBackButtonHidden(true)
+        .overlay {
+          Text("No deleted keys")
+              .font(.system(size: 16, weight: .medium))
+              .foregroundColor(.black40)
+              .opacity(viewModel.items.isEmpty ? 1 : 0)
+        }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Deleted")
         .toolbar {
-            LeadingToolbarItems {
-                BackButton {
-                    dismiss()
-                }
-                Title("Deleted")
-            }
             TrailingToolbarItems {
                 HStack(spacing: 8) {
                     NavBarButton {

@@ -27,7 +27,7 @@ struct InstructionView: View {
             Spacer()
 
             NavigationLink {
-                ConnectionView(viewModel: .init())
+                ConnectionView()
                     .customBackground(Color.background)
             } label: {
                 Text("Connect")

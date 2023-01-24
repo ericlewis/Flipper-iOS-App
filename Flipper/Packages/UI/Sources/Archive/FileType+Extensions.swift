@@ -2,7 +2,7 @@ import Core
 import SwiftUI
 
 extension ArchiveItem.Kind {
-    var name: String {
+    var name: LocalizedStringKey {
         switch self {
         case .subghz: return "Sub-GHz"
         case .rfid: return "RFID 125"
@@ -24,10 +24,10 @@ extension ArchiveItem.Kind {
 
     var color: Color {
         switch self {
-        case .subghz: return .subGHz
-        case .rfid: return .rfid125
-        case .nfc: return .nfc
-        case .infrared: return .infrared
+        case .subghz: return .green
+        case .rfid: return .orange
+        case .nfc: return .blue
+        case .infrared: return .pink
         case .ibutton: return .iButton
         }
     }

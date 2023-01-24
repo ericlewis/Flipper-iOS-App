@@ -32,8 +32,6 @@ struct EmulateView: View {
                 EmptyView()
             }
         }
-        .padding(.horizontal, 24)
-        .padding(.top, 18)
         .customAlert(isPresented: $viewModel.showAppLocked) {
             FlipperBusyAlert(isPresented: $viewModel.showAppLocked)
         }
@@ -236,7 +234,8 @@ private struct SendButton: View {
 }
 
 struct EmulateDescription: View {
-    @StateObject var viewModel: EmulateViewModel
+    @ObservedObject
+    var viewModel: EmulateViewModel
 
     var text: String {
         switch viewModel.deviceStatus {
@@ -291,6 +290,7 @@ struct EmulateDescription: View {
             Text(text)
                 .font(.system(size: 11, weight: .medium))
                 .foregroundColor(.black20)
+                .padding(.top, 5)
         }
     }
 }

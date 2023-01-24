@@ -9,19 +9,15 @@ struct DeviceHeader: View {
         VStack {
             if let device = device {
                 DeviceInfoHeader(flipper: device)
-                    .padding(.top, 4)
-                    .padding(.bottom, 12)
-                    .padding(.horizontal, 14)
             } else {
                 NoDeviceHeader(flipper: device)
-                    .padding(.top, 4)
-                    .padding(.bottom, 12)
-                    .padding(.horizontal, 14)
             }
         }
-        .frame(height: 116)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 14)
         .frame(maxWidth: .infinity)
         .background(Color.a1)
+        .foregroundStyle(.white)
     }
 }
 

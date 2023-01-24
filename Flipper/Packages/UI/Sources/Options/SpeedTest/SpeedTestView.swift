@@ -3,8 +3,11 @@ import SwiftUI
 // swiftlint:disable vertical_parameter_alignment_on_call
 
 struct SpeedTestView: View {
-    @StateObject var viewModel: SpeedTestViewModel
-    @Environment(\.dismiss) private var dismiss
+    @StateObject
+    private var viewModel: SpeedTestViewModel = .init()
+  
+    @Environment(\.dismiss)
+    private var dismiss
 
     var body: some View {
         VStack {
@@ -37,16 +40,8 @@ struct SpeedTestView: View {
             .padding(.bottom, 50)
         }
         .padding(14)
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            LeadingToolbarItems {
-                BackButton {
-                    dismiss()
-                }
-                Title("Speed Test")
-            }
-        }
+        .navigationTitle("Speed Test")
         .onDisappear {
             viewModel.stop()
         }

@@ -7,8 +7,6 @@ struct WelcomeView: View {
         NavigationView {
             InstructionView(viewModel: .init())
                 .customBackground(Color.background)
-                .navigationTitle("")
-                .navigationBarHidden(true)
         }
         .navigationViewStyle(.stack)
     }

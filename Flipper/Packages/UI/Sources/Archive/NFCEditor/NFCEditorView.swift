@@ -61,7 +61,6 @@ struct NFCEditorView: View {
                         .transition(.move(edge: .bottom))
                     }
                 }
-                .navigationBarHidden(true)
                 .customAlert(isPresented: $viewModel.showSaveChanges) {
                     SaveChangesAlert(viewModel: viewModel)
                 }

@@ -1,21 +1,26 @@
 import SwiftUI
 
 public struct RootView: View {
-    @Environment(\.scenePhase) var scenePhase
-    @ObservedObject var viewModel: RootViewModel
-    @StateObject var alertController: AlertController = .init()
-    @StateObject var hexKeyboardController: HexKeyboardController = .init()
+    @Environment(\.scenePhase)
+    private var scenePhase
 
-    public init(viewModel: RootViewModel) {
-        self.viewModel = viewModel
-    }
+    @StateObject
+    private var viewModel: RootViewModel = .init()
+
+    @StateObject
+    private var alertController: AlertController = .init()
+
+    @StateObject
+    private var hexKeyboardController: HexKeyboardController = .init()
+
+    public init() {}
 
     public var body: some View {
         ZStack {
             if viewModel.isFirstLaunch {
                 WelcomeView(viewModel: .init())
             } else {
-                MainView(viewModel: .init())
+                MainView()
             }
 
             VStack {

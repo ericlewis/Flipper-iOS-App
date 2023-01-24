@@ -1,32 +1,42 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject var viewModel: MainViewModel
-    @StateObject var tabViewController: TabViewController = .init()
+    @StateObject
+    private var viewModel: MainViewModel = .init()
+
+    @StateObject
+    private var tabViewController: TabViewController = .init()
+
+    init() {
+      // ERIC TODO: moo
+      UITabBarItem.appearance().badgeColor = .systemOrange
+    }
 
     var body: some View {
-        VStack(spacing: 0) {
-            ZStack {
-                DeviceView(viewModel: .init())
-                    .opacity(viewModel.selectedTab == .device ? 1 : 0)
-                ArchiveView(viewModel: .init())
-                    .opacity(viewModel.selectedTab == .archive ? 1 : 0)
-                HubView(viewModel: .init())
-                    .opacity(viewModel.selectedTab == .hub ? 1 : 0)
-
-                ImportedBanner(itemName: viewModel.importedName)
-                    .opacity(viewModel.importedOpacity)
-            }
-
-            if !tabViewController.isHidden {
-                TabView(
-                    viewModel: .init(),
-                    selected: $viewModel.selectedTab
-                )
-                .transition(.move(edge: .bottom))
-            }
-        }
-        .edgesIgnoringSafeArea(.bottom)
+      SwiftUI.TabView(selection: $viewModel.selectedTab) {
+        DeviceView()
+          .tag(TabView.Tab.device)
+          .tabItem {
+            Label("Connected", systemImage: "checkmark.circle")
+          }
+        ArchiveView()
+          .tag(TabView.Tab.archive)
+          .tabItem {
+            Label("Archive", systemImage: "folder")
+          }
+        HubView()
+          .tag(TabView.Tab.hub)
+          .tabItem {
+            Label("Hub", systemImage: "rectangle.grid.2x2")
+          }
+          .badge("")
+        OptionsView()
+          .tag(TabView.Tab.options)
+          .tabItem {
+            Label("Options", systemImage: "gearshape")
+          }
+      }
+      // ERIC TODO: kill this, we don't need it i think since its hide / show
         .environmentObject(tabViewController)
     }
 }

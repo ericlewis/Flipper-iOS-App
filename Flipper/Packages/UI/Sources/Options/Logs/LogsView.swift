@@ -1,8 +1,11 @@
 import SwiftUI
 
 struct LogsView: View {
-    @StateObject var viewModel: LogsViewModel
-    @Environment(\.dismiss) private var dismiss
+    @StateObject
+    private var viewModel: LogsViewModel = .init()
+
+    @Environment(\.dismiss)
+    private var dismiss
 
     var body: some View {
         List {
@@ -15,44 +18,32 @@ struct LogsView: View {
                 viewModel.delete(at: indexSet)
             }
         }
-        .navigationBarBackButtonHidden(true)
+        .navigationTitle("Logs")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            LeadingToolbarItems {
-                BackButton {
-                    dismiss()
-                }
-                Title("Logs")
+          Menu {
+            Section("Log Level") {
+              ForEach(viewModel.logLevels, id: \.self) { level in
+                  Button {
+                      viewModel.changeLogLevel(to: level)
+                  } label: {
+                      HStack {
+                          Text(level.rawValue)
+                          if level == viewModel.logLevel {
+                              Image(systemName: "checkmark")
+                          }
+                      }
+                  }
+              }
             }
-            TrailingToolbarItems {
-                NavBarMenu {
-                    ForEach(viewModel.logLevels, id: \.self) { level in
-                        Button {
-                            viewModel.changeLogLevel(to: level)
-                        } label: {
-                            HStack {
-                                Text(level.rawValue)
-                                if level == viewModel.logLevel {
-                                    Image(systemName: "checkmark")
-                                }
-                            }
-                        }
-                    }
-                } label: {
-                    Text("Log level")
-                        .font(.system(size: 14, weight: .bold))
-                        .padding(.horizontal, 4)
-                }
-
-                NavBarButton {
-                    viewModel.deleteAll()
-                } label: {
-                    Text("Delete All")
-                        .font(.system(size: 14, weight: .bold))
-                        .padding(.horizontal, 4)
-                }
-                .padding(.trailing, 4)
-            }
+          } label: {
+            Label("Log Level", systemImage: "line.3.horizontal.decrease.circle")
+          }
+          Button {
+            viewModel.deleteAll()
+          } label: {
+            Label("Delete All", systemImage: "trash")
+          }
         }
     }
 }

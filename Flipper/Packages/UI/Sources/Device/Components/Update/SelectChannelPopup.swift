@@ -92,7 +92,6 @@ struct SelectChannelButton: View {
                 Image(systemName: "chevron.down")
                     .foregroundColor(.black30)
             }
-            .frame(height: 44)
         }
         .background(GeometryReader {
             Color.clear.preference(

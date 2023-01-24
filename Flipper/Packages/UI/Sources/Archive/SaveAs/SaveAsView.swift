@@ -58,7 +58,6 @@ struct SaveAsView: View {
                 alertController.alert
             }
         }
-        .navigationBarHidden(true)
         .alert(isPresented: $viewModel.isError) {
             Alert(title: Text(viewModel.error))
         }

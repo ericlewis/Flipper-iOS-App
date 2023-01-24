@@ -1,129 +1,139 @@
 import SwiftUI
 
 struct InfoView: View {
-    @StateObject var viewModel: InfoViewModel
-    @StateObject var alertController: AlertController = .init()
-    @Environment(\.dismiss) private var dismiss
+  @ObservedObject
+  var viewModel: InfoViewModel
 
-    var body: some View {
-        ZStack {
-            VStack(alignment: .leading, spacing: 0) {
-                if viewModel.isEditing {
-                    SheetEditHeader(
-                        title: "Editing",
-                        description: viewModel.item.name.value,
-                        onSave: viewModel.saveChanges,
-                        onCancel: viewModel.undoChanges
-                    )
-                } else {
-                    SheetHeader(
-                        title: viewModel.item.isNFC ? "Card Info" : "Key Info",
-                        description: viewModel.item.name.value
-                    ) {
-                        viewModel.dismiss()
-                    }
-                }
+  @StateObject
+  private var alertController: AlertController = .init()
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 0) {
-                        CardView(
-                            item: $viewModel.item,
-                            isEditing: $viewModel.isEditing,
-                            kind: .existing
-                        )
-                        .padding(.top, 6)
-                        .padding(.horizontal, 24)
+  @Environment(\.dismiss)
+  private var dismiss
 
-                        EmulateView(viewModel: .init(item: viewModel.item))
-                            .opacity(viewModel.isEditing ? 0 : 1)
-                            .environmentObject(alertController)
+  var body: some View {
+    NavigationView {
+      VStack(alignment: .leading, spacing: 0) {
+        // ERIC TODO: move this to nav bar
+  //      if viewModel.isEditing {
+  //        SheetEditHeader(
+  //          title: "Editing",
+  //          description: viewModel.item.name.value,
+  //          onSave: viewModel.saveChanges,
+  //          onCancel: viewModel.undoChanges
+  //        )
+  //      } else {
+  //        SheetHeader(
+  //          title: viewModel.item.isNFC ? "Card Info" : "Key Info",
+  //          description: viewModel.item.name.value
+  //        ) {
+  //          viewModel.dismiss()
+  //        }
+  //      }
 
-                        VStack(alignment: .leading, spacing: 2) {
-                            if viewModel.item.isEditableNFC {
-                                InfoButton(
-                                    image: "HexEditor",
-                                    title: "Edit Dump"
-                                ) {
-                                    viewModel.showDumpEditor = true
-                                }
-                                .foregroundColor(.primary)
-                            }
-                            InfoButton(
-                                image: "Share",
-                                title: "Share"
-                            ) {
-                                viewModel.share()
-                            }
-                            .foregroundColor(.primary)
-                            InfoButton(
-                                image: "Delete",
-                                title: "Delete"
-                            ) {
-                                viewModel.delete()
-                            }
-                            .foregroundColor(.sRed)
-                        }
-                        .padding(.top, 8)
-                        .padding(.horizontal, 24)
-                        .opacity(viewModel.isEditing ? 0 : 1)
-
-                        Spacer()
-                    }
-                }
+        List {
+          Section {
+            CardView(
+              item: $viewModel.item,
+              isEditing: $viewModel.isEditing,
+              kind: .existing
+            )
+          } footer: {
+            EmulateView(viewModel: .init(item: viewModel.item))
+              .opacity(viewModel.isEditing ? 0 : 1)
+              .environmentObject(alertController)
+              .padding(.top)
+              .padding(.bottom, 20)
+              .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
+          }
+          if viewModel.item.isEditableNFC {
+            InfoButton(
+              image: "HexEditor",
+              title: "Edit Dump"
+            ) {
+              viewModel.showDumpEditor = true
             }
-
-            if alertController.isPresented {
-                alertController.alert
+            .foregroundColor(.primary)
+          }
+          Section {
+            InfoButton(
+              image: "Share",
+              title: "Share" // TODO: should be system image
+            ) {
+              viewModel.share()
             }
+            InfoButton(
+              image: "Delete",
+              title: "Delete" // TODO: should be system image
+            ) {
+              viewModel.delete()
+            }
+            .foregroundColor(.sRed)
+          }
         }
-        .bottomSheet(isPresented: $viewModel.showShareView) {
-            ShareView(viewModel: .init(item: viewModel.item))
+      }
+      .overlay {
+        if alertController.isPresented {
+          alertController.alert
         }
-        .fullScreenCover(isPresented: $viewModel.showDumpEditor) {
-            NFCEditorView(viewModel: .init(item: $viewModel.item))
-        }
-        .alert(isPresented: $viewModel.isError) {
-            Alert(title: Text(viewModel.error))
-        }
-        .onReceive(viewModel.dismissPublisher) {
+      }
+      .bottomSheet(isPresented: $viewModel.showShareView) {
+        ShareView(viewModel: .init(item: viewModel.item))
+      }
+      .fullScreenCover(isPresented: $viewModel.showDumpEditor) {
+        NFCEditorView(viewModel: .init(item: $viewModel.item))
+      }
+      .alert(isPresented: $viewModel.isError) {
+        Alert(title: Text(viewModel.error))
+      }
+      .onReceive(viewModel.dismissPublisher) {
+        dismiss()
+      }
+      .background(Color.background)
+      .edgesIgnoringSafeArea(.bottom)
+      .environmentObject(alertController)
+      .navigationTitle(viewModel.item.isNFC ? "Card Info" : "Key Info")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem {
+          Button {
             dismiss()
+          } label: {
+            Label("Dismiss", systemImage: "xmark")
+          }
         }
-        .background(Color.background)
-        .edgesIgnoringSafeArea(.bottom)
-        .environmentObject(alertController)
+      }
     }
+  }
 }
 
 struct InfoButton: View {
-    let image: String
-    let title: String
-    let action: () -> Void
+  let image: String
+  let title: LocalizedStringKey
+  let action: () -> Void
 
-    init(
-        image: String,
-        title: String,
-        action: @escaping () -> Void,
-        longPressAction: @escaping () -> Void = {}
-    ) {
-        self.image = image
-        self.title = title
-        self.action = action
-    }
+  init(
+    image: String,
+    title: LocalizedStringKey,
+    action: @escaping () -> Void,
+    longPressAction: @escaping () -> Void = {}
+  ) {
+    self.image = image
+    self.title = title
+    self.action = action
+  }
 
-    var body: some View {
-        Button {
-        } label: {
-            HStack(spacing: 8) {
-                Image(image)
-                    .renderingMode(.template)
-                Text(title)
-                    .font(.system(size: 14, weight: .medium))
-            }
-            .frame(minWidth: 44, minHeight: 44)
-            .padding(.trailing, 44)
-        }
-        .simultaneousGesture(TapGesture().onEnded {
-            action()
-        })
+  var body: some View {
+    Button {
+    } label: {
+      HStack(spacing: 8) {
+        Image(image)
+          .renderingMode(.template)
+        Text(title)
+          .font(.system(size: 14, weight: .medium))
+      }
     }
+    .simultaneousGesture(TapGesture().onEnded {
+      action()
+    })
+  }
 }

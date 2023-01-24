@@ -16,7 +16,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.flipperdevices.main</string>
+		<string>group.com.flipperdevices.mainn</string>
 	</array>
 	<key>com.apple.security.device.bluetooth</key>
 	<true/>

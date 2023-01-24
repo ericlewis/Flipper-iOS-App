@@ -2,26 +2,30 @@ import Core
 import SwiftUI
 
 struct OptionsView: View {
-    @StateObject var viewModel: OptionsViewModel
-    @Environment(\.dismiss) private var dismiss
+    @StateObject
+    private var viewModel: OptionsViewModel = .init()
+  
+    @Environment(\.dismiss)
+    private var dismiss
 
     var body: some View {
+      NavigationView {
         List {
-            Section(header: Text("Utils")) {
+            Section(header: Text("Utilities")) {
                 NavigationLink("Ping") {
-                    PingView(viewModel: .init())
+                    PingView()
                 }
                 .disabled(!viewModel.isAvailable)
                 NavigationLink("Stress Test") {
-                    StressTestView(viewModel: .init())
+                    StressTestView()
                 }
                 .disabled(!viewModel.isAvailable)
                 NavigationLink("Speed Test") {
-                    SpeedTestView(viewModel: .init())
+                    SpeedTestView()
                 }
                 .disabled(!viewModel.isAvailable)
                 NavigationLink("Logs") {
-                    LogsView(viewModel: .init())
+                    LogsView()
                 }
                 Button("Backup Keys") {
                     viewModel.backupKeys()
@@ -29,9 +33,9 @@ struct OptionsView: View {
                 .disabled(!viewModel.hasKeys)
             }
 
-            Section(header: Text("Remote")) {
-                NavigationLink("Screen Streaming") {
-                    RemoteControlView(viewModel: .init())
+            Section(header: Text("Device")) {
+                NavigationLink("Remote Control") {
+                    RemoteControlView()
                 }
                 NavigationLink("File Manager") {
                     FileManagerView(viewModel: .init())
@@ -56,7 +60,7 @@ struct OptionsView: View {
                         Text("Disable provisioning")
                     }
                     NavigationLink("I'm watching you") {
-                        CarrierView(viewModel: .init())
+                        CarrierView()
                     }
                     Button("Reset App") {
                         viewModel.showResetApp = true
@@ -73,39 +77,29 @@ struct OptionsView: View {
                 }
             }
 
-            Section(header: Text("Resources")) {
+            Section {
                 Link("Forum", destination: URL(string: "https://forum.flipperzero.one")!)
                 Link("GitHub", destination: URL(string: "https://github.com/flipperdevices")!)
-            }
-
-            Section {
+            } header: {
+              Text("Resources")
             } footer: {
-                VStack(alignment: .center) {
-                    Text("Flipper Mobile App")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.black20)
-                    Text("Version: \(viewModel.appVersion)")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.black40)
-                }
-                .padding(.vertical, 20)
-                .frame(maxWidth: .infinity)
-                .onTapGesture {
-                    viewModel.onVersionTapGesture()
-                }
+              VStack(alignment: .center) {
+                  Text("Flipper Mobile App")
+                      .font(.system(size: 12, weight: .medium))
+                      .foregroundColor(.black20)
+                  Text("Version: \(viewModel.appVersion)")
+                      .font(.system(size: 12, weight: .medium))
+                      .foregroundColor(.black40)
+              }
+              .frame(maxWidth: .infinity)
+              .padding(.vertical)
+              .onTapGesture {
+                  viewModel.onVersionTapGesture()
+              }
             }
-            .padding(.top, -40)
-            .padding(.bottom, 20)
         }
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            LeadingToolbarItems {
-                BackButton {
-                    dismiss()
-                }
-                Title("Options")
-            }
-        }
+        .navigationTitle("Options")
+      }
     }
 }

@@ -1,35 +1,43 @@
 import SwiftUI
 
+extension UINavigationController {
+  open override func viewWillLayoutSubviews() {
+    super.viewWillLayoutSubviews()
+    navigationBar.topItem?.backButtonDisplayMode = .minimal
+  }
+}
+
 struct NavigationBarModifier: ViewModifier {
-    let backgroundColor: UIColor?
+//    let backgroundColor: UIColor?
 
     init(foregroundColor: UIColor?, backgroundColor: UIColor?) {
-        self.backgroundColor = backgroundColor
-        let foregroundColor = foregroundColor ?? .white
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundColor = backgroundColor
-        appearance.titleTextAttributes[.foregroundColor] = foregroundColor
-        appearance.largeTitleTextAttributes[.foregroundColor] = foregroundColor
-
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().compactAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().tintColor = foregroundColor
+//        self.backgroundColor = backgroundColor
+//        let foregroundColor = foregroundColor ?? .white
+//        let appearance = UINavigationBarAppearance()
+//        appearance.configureWithTransparentBackground()
+//        appearance.backgroundColor = backgroundColor
+//        appearance.titleTextAttributes[.foregroundColor] = foregroundColor
+//        appearance.largeTitleTextAttributes[.foregroundColor] = foregroundColor
+//
+//        UINavigationBar.appearance().standardAppearance = appearance
+//        UINavigationBar.appearance().compactAppearance = appearance
+//        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+//        UINavigationBar.appearance().tintColor = foregroundColor
     }
 
     func body(content: Content) -> some View {
-        ZStack {
-            content
-            VStack {
-                GeometryReader { geometry in
-                    Color(backgroundColor ?? .clear)
-                        .frame(height: geometry.safeAreaInsets.top)
-                        .edgesIgnoringSafeArea(.top)
-                    Spacer()
-                }
-            }
-        }
+      content
+//        ZStack {
+//            content
+//            VStack {
+//                GeometryReader { geometry in
+//                    Color(backgroundColor ?? .clear)
+//                        .frame(height: geometry.safeAreaInsets.top)
+//                        .edgesIgnoringSafeArea(.top)
+//                    Spacer()
+//                }
+//            }
+//        }
     }
 }
 

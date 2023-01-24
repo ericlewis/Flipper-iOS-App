@@ -2,8 +2,11 @@ import Core
 import SwiftUI
 
 struct StressTestView: View {
-    @StateObject var viewModel: StressTestViewModel
-    @Environment(\.dismiss) private var dismiss
+    @StateObject
+    private var viewModel: StressTestViewModel = .init()
+
+    @Environment(\.dismiss)
+    private var dismiss
 
     var body: some View {
         VStack {
@@ -38,16 +41,8 @@ struct StressTestView: View {
             }
             .padding(.vertical, 20)
         }
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            LeadingToolbarItems {
-                BackButton {
-                    dismiss()
-                }
-                Title("Stress Test")
-            }
-        }
+        .navigationTitle("Stress Test")
         .onDisappear {
             viewModel.stop()
         }

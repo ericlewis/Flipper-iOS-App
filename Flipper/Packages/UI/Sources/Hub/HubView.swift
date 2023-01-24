@@ -2,30 +2,21 @@ import Core
 import SwiftUI
 
 struct HubView: View {
-    @StateObject var viewModel: HubViewModel
+    @StateObject
+    private var viewModel: HubViewModel = .init()
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack {
-                    NavigationLink {
-                        NFCToolsView(viewModel: .init())
-                    } label: {
-                        NFCToolsCard(hasNotification: viewModel.hasMFLog)
-                    }
+            List {
+                NavigationLink {
+                    NFCToolsView()
+                } label: {
+                    NFCToolsCard(hasNotification: viewModel.hasMFLog)
                 }
-                .padding(14)
             }
-            .background(Color.background)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                LeadingToolbarItems {
-                    Title("Hub")
-                        .padding(.leading, 8)
-                }
-            }
+            .navigationTitle("Hub")
         }
         .navigationViewStyle(.stack)
-        .navigationBarColors(foreground: .primary, background: .a1)
     }
 }

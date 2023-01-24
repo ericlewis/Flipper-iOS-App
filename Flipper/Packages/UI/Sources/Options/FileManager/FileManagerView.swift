@@ -4,8 +4,11 @@ import Peripheral
 import UniformTypeIdentifiers
 
 struct FileManagerView: View {
-    @StateObject var viewModel: FileManagerViewModel
-    @Environment(\.dismiss) private var dismiss
+    @StateObject
+    var viewModel: FileManagerViewModel
+
+    @Environment(\.dismiss)
+    private var dismiss
 
     var body: some View {
         VStack {
@@ -18,15 +21,9 @@ struct FileManagerView: View {
             case .none: ProgressView()
             }
         }
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(viewModel.title)
         .toolbar {
-            LeadingToolbarItems {
-                BackButton {
-                    dismiss()
-                }
-                Title(viewModel.title)
-            }
             TrailingToolbarItems {
                 if !viewModel.path.isEmpty, case .list = viewModel.content {
                     NavBarMenu {

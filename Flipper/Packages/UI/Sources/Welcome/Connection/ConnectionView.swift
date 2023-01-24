@@ -2,8 +2,11 @@ import Core
 import SwiftUI
 
 struct ConnectionView: View {
-    @StateObject var viewModel: ConnectionViewModel
-    @Environment(\.dismiss) private var dismiss
+  @StateObject
+  private var viewModel: ConnectionViewModel = .init()
+  
+  @Environment(\.dismiss)
+  private var dismiss
 
     var body: some View {
         VStack(spacing: 0) {
@@ -71,7 +74,6 @@ struct ConnectionView: View {
         }
         .padding(.horizontal, 16)
         .background(Color.background)
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             LeadingToolbarItems {
@@ -91,7 +93,6 @@ struct ConnectionView: View {
         .onDisappear {
             viewModel.stopScan()
         }
-        .navigationBarColors(foreground: .primary, background: Color.background)
     }
 
     func row(for flipper: Flipper) -> some View {

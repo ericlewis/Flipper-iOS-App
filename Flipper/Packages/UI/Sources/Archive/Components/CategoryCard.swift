@@ -4,26 +4,15 @@ import OrderedCollections
 
 struct CategoryCard: View {
     let groups: OrderedDictionary<ArchiveItem.Kind, Int>
-    let deletedCount: Int
 
     var body: some View {
-        VStack(spacing: 0) {
-            ForEach(groups.keys, id: \.self) { key in
-                CategoryLink(
-                    kind: key,
-                    count: groups[key] ?? 0)
-            }
-
-            Divider()
-                .padding(.top, 2)
-                .padding(.bottom, 1)
-
-            CategoryDeletedLink(
-                count: deletedCount)
+      Section {
+        ForEach(groups.keys, id: \.self) { key in
+            CategoryLink(
+                kind: key,
+                count: groups[key] ?? 0)
         }
-        .background(Color.groupedBackground)
-        .cornerRadius(10)
-        .shadow(color: .shadow, radius: 16, x: 0, y: 4)
+      }
     }
 }
 
@@ -33,9 +22,7 @@ struct CategoryLink: View {
 
     var body: some View {
         NavigationLink {
-            CategoryView(viewModel: .init(
-                name: kind.name,
-                kind: kind))
+          CategoryView(viewModel: CategoryViewModel(name: kind.name, kind: kind))
         } label: {
             CategoryRow(
                 image: kind.icon,
@@ -50,45 +37,35 @@ struct CategoryDeletedLink: View {
 
     var body: some View {
         NavigationLink {
-            CategoryDeletedView(viewModel: .init())
+            CategoryDeletedView()
         } label: {
-            CategoryRow(image: nil, name: "Deleted", count: count)
+            CategoryRow(image: Image("Delete"), name: "Deleted", count: count)
+            .foregroundStyle(.red)
         }
     }
 }
 
 struct CategoryRow: View {
     let image: Image?
-    let name: String
+    let name: LocalizedStringKey
     let count: Int
 
     var body: some View {
-        HStack {
-            HStack(spacing: 8) {
-                if let image = image {
-                    image
-                        .resizable()
-                        .renderingMode(.template)
-                        .foregroundColor(.primary)
-                        .frame(width: 24, height: 24)
-                }
-                Text(name)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.primary)
-            }
-
-            Spacer()
-
-            HStack(spacing: 2) {
-                // swiftlint:disable empty_count
-                Text(count == 0 ? "" : "\(count)")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.black30)
-                Image("ChevronRight")
-            }
+      Label {
+        Text(name)
+      } icon: {
+        Group {
+          if let image {
+            image
+              .resizable()
+              .renderingMode(.template)
+          } else {
+            ProgressView()
+          }
         }
-        .frame(height: 44, alignment: .center)
-        .padding(.leading, 12)
-        .padding(.trailing, 9)
+        .aspectRatio(1, contentMode: .fit)
+        .frame(maxWidth: 18)
+      }
+      .badge(count == 0 ? "" : "\(count)")
     }
 }

@@ -13,7 +13,6 @@ struct DeletedInfoView: View {
             ) {
                 viewModel.dismiss()
             }
-
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     CardView(

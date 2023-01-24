@@ -12,5 +12,6 @@ struct SearchButton: View {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 18, weight: .medium))
         }
+        .foregroundColor(.accentColor)
     }
 }

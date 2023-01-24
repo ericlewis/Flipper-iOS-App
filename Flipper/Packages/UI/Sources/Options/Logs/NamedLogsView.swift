@@ -10,20 +10,13 @@ struct NamedLogsView: View {
                 Text(message)
             }
         }
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(viewModel.name)
         .toolbar {
-            LeadingToolbarItems {
-                BackButton {
-                    dismiss()
-                }
-                Title(viewModel.name)
-            }
-            TrailingToolbarItems {
-                ShareButton {
-                    viewModel.share()
-                }
-            }
+          // ERIC TODO: should use share link, and idk what we are sharing.
+          ShareLink(item: "https://google.com") {
+            Label("Share Log", systemImage: "square.and.arrow.up")
+          }
         }
     }
 }

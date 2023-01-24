@@ -2,9 +2,14 @@ import Core
 import SwiftUI
 
 struct ReaderAttackView: View {
-    @StateObject var viewModel: ReaderAttackViewModel
-    @StateObject var alertController: AlertController = .init()
-    @Environment(\.dismiss) private var dismiss
+    @StateObject
+    private var viewModel: ReaderAttackViewModel = .init()
+
+    @StateObject
+    private var alertController: AlertController = .init()
+
+    @Environment(\.dismiss)
+    private var dismiss
 
     var title: String {
         guard !viewModel.newKeys.isEmpty else {
@@ -184,7 +189,6 @@ struct ReaderAttackView: View {
             }
         }
         .background(Color.background)
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .customAlert(isPresented: $viewModel.showCancelAttack) {
             CancelAttackAlert(isPresented: $viewModel.showCancelAttack) {

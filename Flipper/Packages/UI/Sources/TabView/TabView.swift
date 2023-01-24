@@ -9,6 +9,7 @@ struct TabView: View {
         case device
         case archive
         case hub
+        case options
     }
 
     func color(for tab: Tab) -> Color {

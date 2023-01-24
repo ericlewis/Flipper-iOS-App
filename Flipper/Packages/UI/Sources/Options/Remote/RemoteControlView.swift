@@ -3,9 +3,14 @@ import SwiftUI
 import Peripheral
 
 struct RemoteControlView: View {
-    @StateObject var viewModel: RemoteControlViewModel
-    @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.dismiss) private var dismiss
+    @StateObject
+    private var viewModel: RemoteControlViewModel = .init()
+
+    @Environment(\.scenePhase)
+    private var scenePhase
+
+    @Environment(\.dismiss)
+    private var dismiss
 
     var body: some View {
         VStack {
@@ -22,16 +27,8 @@ struct RemoteControlView: View {
         }
         .frame(maxWidth: .infinity)
         .background(Color.background)
-        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            LeadingToolbarItems {
-                BackButton {
-                    dismiss()
-                }
-                Title("Remote Control")
-            }
-        }
+        .navigationTitle("Remote Control")
         .onAppear {
             viewModel.startStreaming()
         }

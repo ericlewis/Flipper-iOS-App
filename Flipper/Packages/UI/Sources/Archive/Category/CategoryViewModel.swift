@@ -2,10 +2,11 @@ import Core
 import Inject
 import Combine
 import Dispatch
+import SwiftUI
 
 @MainActor
 class CategoryViewModel: ObservableObject {
-    let name: String
+    let name: LocalizedStringKey
     @Published var items: [ArchiveItem] = []
     var selectedItem: ArchiveItem = .none
     @Published var showInfoView = false
@@ -14,7 +15,7 @@ class CategoryViewModel: ObservableObject {
     @Inject private var archive: Archive
     var disposeBag = DisposeBag()
 
-    init(name: String, kind: ArchiveItem.Kind) {
+    init(name: LocalizedStringKey, kind: ArchiveItem.Kind) {
         self.name = name
 
         archive.items

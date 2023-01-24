@@ -1,64 +1,52 @@
 import SwiftUI
 
 struct PingView: View {
-    @StateObject var viewModel: PingViewModel
-    @Environment(\.dismiss) private var dismiss
-    @State var entered: String = ""
+  @StateObject
+  private var viewModel: PingViewModel = .init()
 
-    var body: some View {
-        VStack(spacing: 20) {
-            HStack {
-                Text("request timestamp: \(viewModel.requestTimestamp)")
-                Spacer()
-            }
+  @Environment(\.dismiss)
+  private var dismiss
 
-            HStack {
-                Text("response timestamp: \(viewModel.responseTimestamp)")
-                Spacer()
-            }
+  @State
+  private var entered: String = ""
 
-            HStack {
-                Text("time: \(viewModel.time) ms")
-                Spacer()
-            }
-
-            HStack {
-                Text("throughput: \(viewModel.bytesPerSecond) bps")
-                Spacer()
-            }
-
-            HStack {
-                Text("payload size: \(Int(viewModel.payloadSize))")
-                Spacer()
-            }
-
-            Slider(
-                value: $viewModel.payloadSize,
-                in: (0...1024),
-                step: 1
-            ) {
-                Text("Packet size")
-            } minimumValueLabel: {
-                Text("1")
-            } maximumValueLabel: {
-                Text(String(1024))
-            }
-            .padding(.vertical, 30)
-
-            Button("Send ping") {
-                viewModel.sendPing()
-            }
+  var body: some View {
+    Form {
+      Section {
+        Slider(
+          value: $viewModel.payloadSize,
+          in: (0...1024),
+          step: 1
+        ) {
+          Text("Packet size")
+        } minimumValueLabel: {
+          Text("1")
+        } maximumValueLabel: {
+          Text(1024, format: .number)
         }
-        .padding(14)
-        .navigationBarBackButtonHidden(true)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            LeadingToolbarItems {
-                BackButton {
-                    dismiss()
-                }
-                Title("Ping")
-            }
-        }
+        .padding(.vertical, 5)
+      } header: {
+        Text("Payload Size \(Text(viewModel.payloadSize, format: .number))")
+      }
+      Section("Result") {
+        Text(viewModel.requestTimestamp, format: .number)
+          .badge("Request")
+        Text(viewModel.responseTimestamp, format: .number)
+          .badge("Response")
+        Text(viewModel.time, format: .number)
+          .badge("Total")
+        Text(viewModel.bytesPerSecond, format: .number)
+          .badge("Throughput")
+      }
     }
+    .navigationBarTitleDisplayMode(.inline)
+    .navigationTitle("Ping")
+    .toolbar {
+      ToolbarItem(placement: .confirmationAction) {
+        Button("Send") {
+          viewModel.sendPing()
+        }
+      }
+    }
+  }
 }
