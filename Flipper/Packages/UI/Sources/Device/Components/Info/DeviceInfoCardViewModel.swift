@@ -68,29 +68,23 @@ class DeviceInfoCardViewModel: ObservableObject {
         return .init(build)
     }
 
-    var internalSpace: AttributedString {
+    var internalSpace: Text {
         guard isConnected, let int = device?.storage?.internal else {
-            return ""
+            return Text("")
         }
-        var result = AttributedString(int.description)
-        if int.free < 20_000 {
-            result.foregroundColor = .sRed
-        }
-        return result
+        return Text(int.description)
+          .foregroundColor(int.free < 20_000 ? .sRed : .primary)
     }
 
-    var externalSpace: AttributedString {
+    var externalSpace: Text {
         guard isConnected, device?.storage?.internal != nil else {
-            return ""
+            return Text("")
         }
         guard let ext = device?.storage?.external else {
-            return "—"
+            return Text("—")
         }
-        var result = AttributedString(ext.description)
-        if ext.free < 100_000 {
-            result.foregroundColor = .sRed
-        }
-        return result
+        return Text(ext.description)
+          .foregroundColor(ext.free < 100_000 ? .red : .primary)
     }
 
     init() {

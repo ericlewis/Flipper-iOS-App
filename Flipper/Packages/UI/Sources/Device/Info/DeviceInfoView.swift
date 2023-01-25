@@ -79,7 +79,7 @@ struct DeviceInfoViewCard: View {
 
     var body: some View {
       ForEach(zippedIndexKey, id: \.0) { index, key in
-          CardRow(name: key, value: values[key] ?? "")
+          CardRow(name: LocalizedStringKey(key), value: LocalizedStringKey(values[key] ?? ""))
       }
     }
 }

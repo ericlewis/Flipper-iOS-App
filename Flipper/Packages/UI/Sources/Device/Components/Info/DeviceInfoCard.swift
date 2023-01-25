@@ -31,20 +31,20 @@ struct DeviceInfoCard: View {
       } else {
         CardRow(
             name: "Firmware Version",
-            value: viewModel.firmwareVersion
+            value: LocalizedStringKey(viewModel.firmwareVersion)
         )
         .foregroundColor(viewModel.firmwareVersionColor)
         CardRow(
             name: "Build Date",
-            value: viewModel.firmwareBuild
+            value: LocalizedStringKey(viewModel.firmwareBuild)
         )
         CardRow(
             name: "Internal Flash",
-            value: viewModel.internalSpace
+            value: "\(viewModel.internalSpace)"
         )
         CardRow(
             name: "SD Card",
-            value: viewModel.externalSpace
+            value: "\(viewModel.externalSpace)"
         )
         NavigationLink("Device Information") {
           DeviceInfoView()

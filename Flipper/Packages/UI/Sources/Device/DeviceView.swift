@@ -84,8 +84,6 @@ struct DeviceView: View {
                 }
               }
             }
-            .navigationBarTitle("Connected")
-            .navigationBarTitleDisplayMode(.inline)
           }
 //            VStack(spacing: 0) {
 //

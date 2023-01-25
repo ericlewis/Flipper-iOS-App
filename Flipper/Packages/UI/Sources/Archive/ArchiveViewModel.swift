@@ -9,7 +9,6 @@ import OrderedCollections
 class ArchiveViewModel: ObservableObject {
     private let logger = Logger(label: "archive-vm")
 
-    @Environment(\.dismiss) private var dismiss
     @Inject private var appState: AppState
     @Inject private var archive: Archive
     private var disposeBag: DisposeBag = .init()

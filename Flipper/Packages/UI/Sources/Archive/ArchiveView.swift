@@ -1,6 +1,7 @@
 import Core
 import SwiftUI
 import Combine
+import PagingView
 
 struct FavoriteCard: View {
   let item: ArchiveItem
@@ -12,29 +13,31 @@ struct FavoriteCard: View {
     Button {
       selectedItem = item
     } label: {
-      VStack(alignment: .leading, spacing: 35) {
-        HStack {
-          item.kind.icon
-            .resizable()
-            .aspectRatio(1, contentMode: .fit)
-            .frame(width: 14)
-          Spacer()
-          switch item.status {
-          case .synchronizing:
-            Image(systemName: "arrow.triangle.2.circlepath")
-          default:
-            Image(systemName: "checkmark")
+      ZStack {
+        RoundedRectangle(cornerRadius: 10).fill(item.kind.color)
+        VStack(alignment: .leading) {
+          HStack {
+            item.kind.icon
+              .resizable()
+              .aspectRatio(1, contentMode: .fit)
+              .frame(width: 14)
+            Spacer()
+            switch item.status {
+            case .synchronizing:
+              Image(systemName: "arrow.triangle.2.circlepath")
+            default:
+              Image(systemName: "checkmark")
+            }
           }
+          .symbolVariant(.fill.circle)
+          .imageScale(.large)
+          Spacer()
+          Text(item.name.value)
+            .font(.callout.bold())
         }
-        .symbolVariant(.fill.circle)
-        .imageScale(.large)
-        Text(item.name.value)
-          .font(.callout.bold())
+        .foregroundStyle(.white)
+        .padding(8)
       }
-      .foregroundStyle(.white)
-      .padding(8)
-      .background(RoundedRectangle(cornerRadius: 10).fill(item.kind.color))
-      .aspectRatio(1.7, contentMode: .fit)
     }
     .buttonStyle(.plain)
     .sheet(item: $selectedItem) { item in
@@ -85,18 +88,14 @@ struct ArchiveView: View {
                     Spacer()
                   }
                   .padding(.top, 8)
-                  ScrollView(.horizontal, showsIndicators: false) {
-                    VStack {
-                      HStack {
-                        ForEach(viewModel.favoriteItems) { item in
-                          FavoriteCard(item: item)
-                        }
-                      }
+                  PagingView(config: .init(margin: 20, spacing: 10)) {
+                    ForEach(viewModel.favoriteItems) { item in
+                      FavoriteCard(item: item)
                     }
-                    .padding(.top, 14)
-                    .padding(.bottom, 20)
-                    .padding(.horizontal, 20)
                   }
+                  .aspectRatio(2.7, contentMode: .fit)
+                  .padding(.top, 14)
+                  .padding(.bottom, 20)
                   .padding(.horizontal, -20)
                 }
                 .listRowSeparator(.hidden)

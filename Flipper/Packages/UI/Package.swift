@@ -27,7 +27,12 @@ let package = Package(
         .package(
             name: "MarkdownUI",
             url: "https://github.com/tonyfreeman/MarkdownUI.git",
-            .branch("main"))
+            .branch("main")),
+        .package(
+          name: "PagingView",
+          url: "https://github.com/ericlewis/PagingView",
+          from: .init(0, 1, 1)
+        )
     ],
     targets: [
         .target(
@@ -36,7 +41,8 @@ let package = Package(
                 "Core",
                 "Lottie",
                 "Analytics",
-                "MarkdownUI"
+                "MarkdownUI",
+                "PagingView"
             ],
             path: "Sources"),
         .testTarget(
