@@ -78,34 +78,46 @@ struct ChannelMenuRow: View {
 }
 
 struct SelectChannelButton: View {
-    @StateObject var viewModel: DeviceUpdateCardModel
+    @ObservedObject
+    public var viewModel: DeviceUpdateCardModel
 
+    // TODO: make work, and also add other cool things.
     var body: some View {
-        Button {
-            viewModel.showChannelSelector = true
-        } label: {
-            HStack(spacing: 6) {
-                Spacer()
-                Text(viewModel.availableFirmware ?? "unknown")
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundColor(viewModel.channelColor)
-                Image(systemName: "chevron.down")
-                    .foregroundColor(.black30)
-            }
+      Menu {
+        Button("Release") {
+
         }
-        .background(GeometryReader {
-            Color.clear.preference(
-                key: SelectChannelOffsetKey.self,
-                value: $0.frame(in: .global).origin.y)
-        })
-        .onPreferenceChange(SelectChannelOffsetKey.self) {
-            viewModel.channelSelectorOffset = $0
+        Button("Release Candidate") {
+
         }
-        .popup(isPresented: $viewModel.showChannelSelector, hideOnTap: true) {
-            SelectChannelPopup(y: viewModel.channelSelectorOffset) {
-                viewModel.onChannelSelected($0)
-            }
+        Button("Development", role: .destructive) {
+
         }
+      } label: {
+        HStack {
+          Text(viewModel.availableFirmware ?? "Unknown")
+          Image(systemName: "chevron.down")
+            .symbolRenderingMode(.hierarchical)
+            .symbolVariant(.circle.fill)
+            .imageScale(.large)
+        }
+        .font(.callout.bold())
+      }
+      .buttonStyle(.borderless)
+      .foregroundStyle(viewModel.channelColor)
+      .background(GeometryReader {
+          Color.clear.preference(
+              key: SelectChannelOffsetKey.self,
+              value: $0.frame(in: .global).origin.y)
+      })
+      .onPreferenceChange(SelectChannelOffsetKey.self) {
+          viewModel.channelSelectorOffset = $0
+      }
+      .popup(isPresented: $viewModel.showChannelSelector, hideOnTap: true) {
+          SelectChannelPopup(y: viewModel.channelSelectorOffset) {
+              viewModel.onChannelSelected($0)
+          }
+      }
     }
 }
 
