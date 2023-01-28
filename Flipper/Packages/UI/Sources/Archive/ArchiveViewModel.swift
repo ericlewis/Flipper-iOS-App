@@ -12,6 +12,7 @@ class ArchiveViewModel: ObservableObject {
     @Inject private var appState: AppState
     @Inject private var archive: Archive
     private var disposeBag: DisposeBag = .init()
+    private var loaded = false
 
     let pullToRefreshThreshold: Double = 1000
 
@@ -99,11 +100,14 @@ class ArchiveViewModel: ObservableObject {
     }
 
     func refresh() {
-        Task {
-            do {
-                try await appState.synchronize()
-            } catch {
-                logger.error("pull to refresh: \(error)")
+        if (!loaded) {
+            Task {
+                do {
+                    try await appState.synchronize()
+                    loaded = true
+                } catch {
+                    logger.error("pull to refresh: \(error)")
+                }
             }
         }
     }

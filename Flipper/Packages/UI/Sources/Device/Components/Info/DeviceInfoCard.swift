@@ -36,7 +36,9 @@ struct DeviceInfoCard: View {
         .foregroundColor(viewModel.firmwareVersionColor)
         CardRow(
             name: "Build Date",
-            value: LocalizedStringKey(viewModel.firmwareBuild)
+            value: LocalizedStringKey(
+                parseBuildDate(viewModel.firmwareBuild)
+            )
         )
         CardRow(
             name: "Internal Flash",
@@ -51,4 +53,14 @@ struct DeviceInfoCard: View {
         }
       }
     }
+}
+
+func parseBuildDate(_ dateString: String) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "dd-MM-yy"
+    guard let date = dateFormatter.date(from: dateString) else {
+        return ""
+    }
+    
+    return date.formatted(.dateTime.day().month().year())
 }

@@ -10,22 +10,27 @@ class DeviceInfoCardViewModel: ObservableObject {
     @Inject private var appState: AppState
     private var disposeBag: DisposeBag = .init()
 
-    @Published var device: Flipper?
+    @Published
+    var device: Flipper?
 
     var isConnecting: Bool {
         device?.state == .connecting
     }
+    
     var isConnected: Bool {
         device?.state == .connected
     }
+    
     var isDisconnected: Bool {
         device?.state == .disconnected ||
         device?.state == .pairingFailed ||
         device?.state == .invalidPairing
     }
+    
     var isNoDevice: Bool {
         device == nil
     }
+    
     var isUpdating: Bool {
         appState.status == .updating
     }
@@ -72,8 +77,10 @@ class DeviceInfoCardViewModel: ObservableObject {
         guard isConnected, let int = device?.storage?.internal else {
             return Text("")
         }
-        return Text(int.description)
-          .foregroundColor(int.free < 20_000 ? .sRed : .primary)
+        return Text(
+            "\(Text(Measurement(value: Double(int.used), unit: UnitInformationStorage.bytes), format: .byteCount(style: .file))) / \(Text(Measurement(value: Double(int.total), unit: UnitInformationStorage.bytes), format: .byteCount(style: .file)))"
+        )
+        .foregroundColor(int.free < 20_000 ? .sRed : .primary)
     }
 
     var externalSpace: Text {
@@ -83,7 +90,7 @@ class DeviceInfoCardViewModel: ObservableObject {
         guard let ext = device?.storage?.external else {
             return Text("—")
         }
-        return Text(ext.description)
+        return Text("\(Text(Measurement(value: Double(ext.used), unit: UnitInformationStorage.bytes), format: .byteCount(style: .file))) / \(Text(Measurement(value: Double(ext.total), unit: UnitInformationStorage.bytes), format: .byteCount(style: .file)))")
           .foregroundColor(ext.free < 100_000 ? .red : .primary)
     }
 
@@ -92,18 +99,5 @@ class DeviceInfoCardViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .assign(to: \.device, on: self)
             .store(in: &disposeBag)
-    }
-}
-
-extension StorageSpace: CustomStringConvertible {
-    public var description: String {
-        "\(used.hr) / \(total.hr)"
-    }
-}
-
-fileprivate extension Int {
-    var hr: String {
-        let formatter = ByteCountFormatter()
-        return formatter.string(fromByteCount: Int64(self))
     }
 }

@@ -31,7 +31,7 @@ struct DeviceInfoView: View {
                 title: "Firmware",
                 values: [
                     "Software Revision": viewModel.softwareRevision,
-                    "Build Date": viewModel.buildDate,
+                    "Build Date": parseBuildDate(viewModel.buildDate),
                     "Target": viewModel.firmwareTarget,
                     "Protobuf Version": viewModel.protobufVersion
                 ]

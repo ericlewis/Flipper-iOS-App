@@ -95,6 +95,7 @@ struct DeviceUpdateCard: View {
         HStack {
           Text("Update Channel")
             .foregroundColor(.black30)
+            .font(.system(size: 14, weight: .medium))
 
           Spacer()
 
@@ -102,8 +103,7 @@ struct DeviceUpdateCard: View {
             .frame(width: 90, height: 17)
         }
         .font(.system(size: 14))
-        .padding(.horizontal, 12)
-        .padding(.top, 18)
+        .padding(.top, 4)
 
         AnimatedPlaceholder()
           .frame(height: 46)
@@ -128,6 +128,7 @@ struct DeviceUpdateCard: View {
         HStack {
           Text("Update Channel")
             .foregroundColor(.black30)
+            .font(.system(size: 14, weight: .medium))
 
           Spacer()
           // ERIC TODO: should be a menu button
@@ -137,7 +138,6 @@ struct DeviceUpdateCard: View {
             }
         }
         .font(.system(size: 14))
-        .padding(.horizontal, 12)
         .padding(.top, 4)
 
         UpdateButton(viewModel: viewModel)
@@ -210,7 +210,8 @@ struct DeviceUpdateCard: View {
 }
 
 struct UpdateButton: View {
-  @StateObject var viewModel: DeviceUpdateCardModel
+  @ObservedObject
+  var viewModel: DeviceUpdateCardModel
 
   var title: String {
     switch viewModel.state {

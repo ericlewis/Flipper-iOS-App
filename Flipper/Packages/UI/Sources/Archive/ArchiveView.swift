@@ -130,9 +130,7 @@ struct ArchiveView: View {
         WidgetSettingsView(viewModel: .init())
       }
       .onAppear {
-        if viewModel.status != .connected {
           viewModel.refresh()
-        }
       }
     }
   }
